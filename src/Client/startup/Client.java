@@ -22,6 +22,5 @@ public class Client {
         } catch (NotBoundException | MalformedURLException | RemoteException e) {
             System.err.println("Failed to initialize remote object.");
         }
-
     }
 }

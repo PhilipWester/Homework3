@@ -16,6 +16,7 @@ public class Server {
             server.setupRegistry();
         } catch (RemoteException | MalformedURLException e) {
             System.err.println("Failed to start server.");
+            System.err.println(e);
         }
     }
 
