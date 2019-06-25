@@ -26,14 +26,12 @@ public class Server {
             TODO: Remove this test snippet
          */
 
-        JdbcObject jdbcObject = new JdbcObject();
-        String testJDBC = "";
+        JdbcObject jdbcObject = null;
         try {
-            testJDBC = jdbcObject.connectToDB();
+            jdbcObject = new JdbcObject();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println("Testjdbc: " + testJDBC);
 
     }
 
