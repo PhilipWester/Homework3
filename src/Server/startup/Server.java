@@ -33,6 +33,20 @@ public class Server {
             e.printStackTrace();
         }
 
+        try {
+            jdbcObject.insertUser("erik", "1212abdfg334");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            String res = jdbcObject.getPwd("jonas");
+            System.out.println(res);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     private void setupRegistry() throws RemoteException, MalformedURLException {
