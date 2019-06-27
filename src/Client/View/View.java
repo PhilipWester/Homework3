@@ -14,6 +14,7 @@ public class View implements Runnable {
     private Filehandler filehandler;
     private Scanner scanner;
     private boolean takeCommands = true;
+    private Boolean loggedIn = false;
 
     public void start(Filehandler filehandler){
         this.filehandler = filehandler;
@@ -25,6 +26,7 @@ public class View implements Runnable {
     @Override
     public void run() {
         while (takeCommands){
+            printOptions();
             switch (scanner.nextLine().toUpperCase()){
                 case "TEST":
                     try {
@@ -33,15 +35,43 @@ public class View implements Runnable {
                         e.printStackTrace();
                     }
                     break;
-                case "QUIT":
+                case "5":
                     takeCommands = false;
                     break;
+                case "1":
+                    System.out.println("Enter your new username: ");
+                    String username = scanner.nextLine();
+                    System.out.println("Enter your new password: ");
+                    String password = scanner.nextLine();
 
+                    try {
+                        if(filehandler.register(username, password)){
+                            System.out.println("Successfully registered " + username);
+                        }else{
+                            System.out.println("Were unable to register " + username + ".\nPlease try a different username");
+                        }
+
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                    break;
                 default:
                     System.out.println("Invalid command");
 
             }
 
+        }
+    }
+
+    /**
+     * An auxiallary function to print the options of the user.
+     */
+    private void printOptions(){
+        System.out.println("Choose an action: ");
+        if(loggedIn){
+            System.out.println("1. Register \n2. Logout \n3. Get data \n4. Set data \n5. Quit");
+        }else{
+            System.out.println("1. Register \n2. Login \n3. Get data \n4. Set data \n5. Quit");
         }
     }
 }

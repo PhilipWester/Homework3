@@ -11,6 +11,8 @@ public class JdbcObject {
     private String USER_COL = "user_name";
     private String PWD_COL = "user_password";
 
+    public String USER_NOT_FOUND = "USER_NOT_FOUND";
+
     //  TODO: Create pre-defined statements.
     private Statement statement;
 
@@ -25,22 +27,6 @@ public class JdbcObject {
         this.statement = connection.createStatement();
 
         initDB();
-
-        /*
-        Below is just testing
-         */
-        /*
-        ResultSet resultSet = statement.executeQuery("SHOW DATABASES");
-
-        StringBuilder output = new StringBuilder();
-        while (resultSet.next()){
-            output.append(resultSet.getString(1)).append("\n");
-
-        }
-        return output.toString();
-
-         */
-
     }
 
     /**
@@ -50,7 +36,6 @@ public class JdbcObject {
      * @param password is the password associated with the username.
      * @throws SQLException if the SQL statement call fails.
      */
-    //  TODO: Make implementation
     public void insertUser(String username, String password) throws SQLException {
         statement.execute("INSERT INTO " + USERS_TABLE + " VALUES " + "(" + "'" + username + "'" + ", " + "'" + password +"'" + ")");
     }
@@ -58,14 +43,15 @@ public class JdbcObject {
     /**
      *
      * @param username is the username who's password is returned.
-     * @return the password linked to the parameter username.
+     * @return the password linked to the parameter username or the String USER_NOT_FOUND if the user was not found.
      * @throws SQLException if the SQL statement call fails.
      */
-    //  TODO: Make implementation
     public String getPwd(String username) throws SQLException {
         ResultSet set = statement.executeQuery("SELECT " + PWD_COL + " FROM " + USERS_TABLE + " WHERE " + USER_COL + " = " + "'" + username + "'");
-        set.next();
-        return set.getString(1);
+        if(set.next()){
+            return set.getString(1);
+        }
+        return USER_NOT_FOUND;
     }
 
     //  TODO: Make implementation
@@ -97,8 +83,7 @@ public class JdbcObject {
                             " size INT," +
                             " owner TEXT," +
                             "public_access BOOLEAN," +
-                            "write_permission BOOLEAN, " +
-                            "read_permisson BOOLEAN" +
+                            "write_access BOOLEAN" +
                             ");"
             );
         } catch (SQLException e) {

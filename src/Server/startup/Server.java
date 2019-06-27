@@ -2,7 +2,6 @@ package Server.startup;
 
 import Common.Filehandler;
 import Server.Controller.Controller;
-import Server.Integration.JdbcObject;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
@@ -20,33 +19,6 @@ public class Server {
             System.err.println("Failed to start server.");
             System.err.println(e);
         }
-
-        /*
-            Test of jdbcObject
-            TODO: Remove this test snippet
-         */
-
-        JdbcObject jdbcObject = null;
-        try {
-            jdbcObject = new JdbcObject();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            jdbcObject.insertUser("erik", "1212abdfg334");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            String res = jdbcObject.getPwd("jonas");
-            System.out.println(res);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-
     }
 
     private void setupRegistry() throws RemoteException, MalformedURLException {
@@ -55,7 +27,13 @@ public class Server {
         }catch(java.rmi.RemoteException noRegistryRunning){
             LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
         }
-        Controller controller = new Controller();
-        Naming.rebind(Filehandler.FILEHANDLER_NAME_IN_REGISTRY, controller);
+
+        try {
+            Controller controller = new Controller();
+            Naming.rebind(Filehandler.FILEHANDLER_NAME_IN_REGISTRY, controller);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 }
