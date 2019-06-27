@@ -17,7 +17,7 @@ public interface Filehandler extends Remote {
 
     String testMessage() throws RemoteException;
 
-    Boolean register(String username, String password) throws RemoteException;
+    Boolean register(Credentials credentials) throws RemoteException;
 
     Boolean login(String username, String password) throws RemoteException;
 

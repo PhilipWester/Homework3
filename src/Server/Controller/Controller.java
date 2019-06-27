@@ -1,5 +1,6 @@
 package Server.Controller;
 
+import Common.Credentials;
 import Common.Filehandler;
 import Server.Integration.JdbcObject;
 
@@ -7,11 +8,11 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
 
-/*
+/**
 *   Contains methods that client can use remotely with RMI
  */
 public class Controller extends UnicastRemoteObject implements Filehandler {
-    JdbcObject jdbcObject;
+    private JdbcObject jdbcObject;
 
     public Controller() throws RemoteException, SQLException {
         super();
@@ -25,11 +26,11 @@ public class Controller extends UnicastRemoteObject implements Filehandler {
     }
 
     @Override
-    public Boolean register(String username, String password) {
+    public Boolean register(Credentials credentials) {
         try {
-            if (jdbcObject.getPwd(username).equals(jdbcObject.USER_NOT_FOUND)){
+            if (jdbcObject.getPwd(credentials.getUsername()).equals(jdbcObject.USER_NOT_FOUND)){
                 try {
-                    jdbcObject.insertUser(username, password);
+                    jdbcObject.insertUser(credentials.getUsername(), credentials.getPassword());
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }

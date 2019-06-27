@@ -1,5 +1,6 @@
 package Client.View;
 
+import Common.Credentials;
 import Common.Filehandler;
 
 import java.rmi.RemoteException;
@@ -41,9 +42,10 @@ public class View implements Runnable {
                     String username = scanner.nextLine();
                     System.out.println("Enter your new password: ");
                     String password = scanner.nextLine();
+                    Credentials credentials = new Credentials(username, password);
 
                     try {
-                        if(filehandler.register(username, password)){
+                        if(filehandler.register(credentials)){
                             System.out.println("Successfully registered " + username);
                         }else{
                             System.out.println("Were unable to register " + username + ".\nPlease try a different username");
@@ -75,7 +77,7 @@ public class View implements Runnable {
     }
 
     /**
-     * An auxiallary function to print the options of the user.
+     * An auxiliary function to print the options of the user.
      */
     private void printOptions(){
         System.out.println("Choose an action: ");
