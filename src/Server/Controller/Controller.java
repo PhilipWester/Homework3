@@ -21,7 +21,7 @@ public class Controller extends UnicastRemoteObject implements Filehandler {
 
     @Override
     public String testMessage() {
-        return "Testing Successfull!";
+        return "Testing Successful!";
     }
 
     @Override

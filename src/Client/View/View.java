@@ -27,7 +27,7 @@ public class View implements Runnable {
     public void run() {
         while (takeCommands){
             printOptions();
-            switch (scanner.nextLine().toUpperCase()){
+            switch (scanner.nextLine()){
                 case "TEST":
                     try {
                         System.out.println(filehandler.testMessage());
@@ -35,9 +35,7 @@ public class View implements Runnable {
                         e.printStackTrace();
                     }
                     break;
-                case "5":
-                    takeCommands = false;
-                    break;
+                //  REGISTER
                 case "1":
                     System.out.println("Enter your new username: ");
                     String username = scanner.nextLine();
@@ -54,6 +52,19 @@ public class View implements Runnable {
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
+                    break;
+                //  LOGIN
+                case "2":
+                    break;
+                //  GET DATA
+                case "3":
+                    break;
+                //  SET DATA
+                case "4":
+                    break;
+                //  QUIT
+                case "5":
+                    takeCommands = false;
                     break;
                 default:
                     System.out.println("Invalid command");
