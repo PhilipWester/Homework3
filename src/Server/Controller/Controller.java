@@ -3,6 +3,7 @@ package Server.Controller;
 import Common.Credentials;
 import Common.Filehandler;
 import Server.Integration.JdbcObject;
+import Server.Model.ActiveUsers;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -10,13 +11,18 @@ import java.sql.SQLException;
 
 /**
 *   Contains methods that client can use remotely with RMI
+ *
+ *  NOTE: This implementation is highly insecure.
+ *  TODO: See if the clients get added to the same ActiveUsers list. (And not separate for each user).
  */
 public class Controller extends UnicastRemoteObject implements Filehandler {
     private JdbcObject jdbcObject;
+    private ActiveUsers activeUsers;
 
     public Controller() throws RemoteException, SQLException {
         super();
         this.jdbcObject = new JdbcObject();
+        this.activeUsers = new ActiveUsers();
 
     }
 
@@ -50,16 +56,30 @@ public class Controller extends UnicastRemoteObject implements Filehandler {
             pwd = jdbcObject.getPwd(username);
             if (pwd.equals(jdbcObject.USER_NOT_FOUND)){
                 return false;
-            }else return pwd.equals(password);
+            }else if(pwd.equals(password)){
+                if(!activeUsers.isActive(username)){
+                    activeUsers.addUser(username);
+                    //  TODO: Remove this testprint
+                    System.out.println("User " + username + " has logged in.");
+                }else{
+                    System.out.println("User " + username + " is already logged in.");
+                }
+                return true;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return false;
     }
 
+    /**
+     *
+     * @param username is the username of the user that wishes to log out.
+     * @return true if successfully logged out, false otherwise.
+     */
     @Override
-    public String logout() {
-        return null;
+    public Boolean logout(String username) {
+        return activeUsers.removeUser(username);
     }
 
     @Override

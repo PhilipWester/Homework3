@@ -10,8 +10,10 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
 /**
- * Starts up the client side by fetching the filehandler
+ * Starts up the client side by fetching the Filehandler
  * and start the view state.
+ *
+ * Note: This client will not work outside of localhost, especially since it does not start Registry of it's own.
  */
 public class Client {
     public static void main(String [] args) {

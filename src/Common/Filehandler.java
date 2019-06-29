@@ -8,7 +8,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 public interface Filehandler extends Remote {
-    String FILEHANDLER_NAME_IN_REGISTRY = "ABC";
+    String FILEHANDLER_NAME_IN_REGISTRY = "FILEHANDLER_NAME_IN_REGISTRY";
 
     /**
      * A function to test the availability of the remote methods.
@@ -21,7 +21,7 @@ public interface Filehandler extends Remote {
 
     Boolean login(String username, String password) throws RemoteException;
 
-    String logout() throws RemoteException;
+    Boolean logout(String username) throws RemoteException;
 
     String getMetadata(String fileName) throws RemoteException;
 

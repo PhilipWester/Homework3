@@ -15,7 +15,7 @@ public class View implements Runnable {
     private Filehandler filehandler;
     private Scanner scanner;
     private boolean takeCommands = true;
-    private Boolean loggedIn = false;
+    private Boolean isLoggedIn = false;
 
     public void start(Filehandler filehandler){
         this.filehandler = filehandler;
@@ -26,6 +26,7 @@ public class View implements Runnable {
 
     @Override
     public void run() {
+        String username = null, password;
         while (takeCommands){
             printOptions();
             switch (scanner.nextLine()){
@@ -39,9 +40,9 @@ public class View implements Runnable {
                 //  REGISTER
                 case "1":
                     System.out.println("Enter your new username: ");
-                    String username = scanner.nextLine();
+                    username = scanner.nextLine();
                     System.out.println("Enter your new password: ");
-                    String password = scanner.nextLine();
+                    password = scanner.nextLine();
                     Credentials credentials = new Credentials(username, password);
 
                     try {
@@ -57,19 +58,65 @@ public class View implements Runnable {
                     break;
                 //  LOGIN
                 case "2":
+                    if(isLoggedIn){
+                        //  TODO: Implement log out
+                        try {
+                            if(isLoggedIn = !filehandler.logout(username))
+                            System.out.println("You are already logged in");
+
+                            if(isLoggedIn){
+                                System.out.println("Failed to log out.");
+                            }else{
+                                System.out.println("Successfully logged out,");
+                            }
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    }
+                    System.out.println("Enter your username: ");
+                    username = scanner.nextLine();
+                    System.out.println("Enter your password: ");
+                    password = scanner.nextLine();
+
+                    try {
+                        if(isLoggedIn = filehandler.login(username, password)){
+                            System.out.println("Logged in successfully.");
+                        }else{
+                            System.out.println("Login Failed.");
+                            username = null;
+                        }
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 //  GET DATA
                 case "3":
+                    //  TODO: Make sure that accessing a file without being logged in to a (correct) account gives an Error.
+                        System.out.println("Specify file by name");
+                        if(isLoggedIn){
+                            String fileName = scanner.nextLine();
+                            try {
+                                System.out.println(filehandler.getMetadata(fileName));
+                            } catch (RemoteException e) {
+                                e.printStackTrace();
+                            }
+                        }else{
+                            System.out.println("You have to be logged in to use this action.");
+                        }
                     break;
                 //  SET DATA
                 case "4":
+                    if(!isLoggedIn){
+                        printIllegalCommand();
+                    }
                     break;
                 //  QUIT
                 case "5":
                     takeCommands = false;
                     break;
                 default:
-                    System.out.println("Invalid command");
+                    printIllegalCommand();
 
             }
 
@@ -81,10 +128,14 @@ public class View implements Runnable {
      */
     private void printOptions(){
         System.out.println("Choose an action: ");
-        if(loggedIn){
+        if(isLoggedIn){
             System.out.println("1. Register \n2. Logout \n3. Get data \n4. Set data \n5. Quit");
         }else{
-            System.out.println("1. Register \n2. Login \n3. Get data \n4. Set data \n5. Quit");
+            System.out.println("1. Register \n2. Login \n5. Quit");
         }
+    }
+
+    private void printIllegalCommand(){
+        System.out.println("Invalid command");
     }
 }
