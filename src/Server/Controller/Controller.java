@@ -2,6 +2,7 @@ package Server.Controller;
 
 import Common.Credentials;
 import Common.Filehandler;
+import Common.MetaData;
 import Server.Integration.JdbcObject;
 import Server.Model.ActiveUsers;
 
@@ -83,12 +84,13 @@ public class Controller extends UnicastRemoteObject implements Filehandler {
     }
 
     @Override
-    public String getMetadata(String fileName) {
+    public MetaData getMetadata(String filename) {
         return null;
     }
 
     @Override
-    public String setMetadata(String fileName, Boolean privateFile, Boolean readOnly) {
-        return null;
+    public Boolean setMetadata(MetaData metaData) {
+        System.out.println("Setting data...");
+        return jdbcObject.setMeta(metaData);
     }
 }

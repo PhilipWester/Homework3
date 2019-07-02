@@ -23,8 +23,8 @@ public interface Filehandler extends Remote {
 
     Boolean logout(String username) throws RemoteException;
 
-    String getMetadata(String fileName) throws RemoteException;
+    MetaData getMetadata(String filename) throws RemoteException;
 
-    String setMetadata(String fileName, Boolean privateFile, Boolean readOnly) throws RemoteException;
+    Boolean setMetadata(MetaData metaData) throws RemoteException;
 
 }

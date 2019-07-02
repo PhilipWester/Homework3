@@ -1,5 +1,7 @@
 package Server.Integration;
 
+import Common.MetaData;
+
 import java.sql.*;
 
 public class JdbcObject {
@@ -13,7 +15,8 @@ public class JdbcObject {
 
     public String USER_NOT_FOUND = "USER_NOT_FOUND";
 
-    //  TODO: Create pre-defined statements.
+    //  TODO: Create prepared statements.
+    private PreparedStatement preparedStatementatement;
     private Statement statement;
 
     public JdbcObject() throws SQLException {
@@ -25,6 +28,8 @@ public class JdbcObject {
 
         Connection connection = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
         this.statement = connection.createStatement();
+
+        preparedStatementatement = connection.prepareStatement("INSERT INTO " + FILES_TABLE + " VALUES (?,?,?,?,?)");
 
         initDB();
     }
@@ -60,9 +65,45 @@ public class JdbcObject {
     }
 
     //  TODO: Make implementation
-    public String[] getMeta(String filename){
-        return new String[]{" ", " "};
+    public MetaData getMeta(String filename){
+        return null;
     }
+
+    /**
+     * Either edits or inserts new meta data.
+     *
+     * @param metaData is what the data is to be edited to.
+     * @return true if successful, false otherwise.
+     */
+    public Boolean setMeta(MetaData metaData){
+        //  If the file exists in DB
+
+        //  If the file does not exist in the DB
+        //String stmnt = "INSERT INTO " + FILES_TABLE + " VALUES " + "(" + "'" + metaData.getFileName() + "'" + ", " + "'" + metaData.getSize() + "'" + ", " + "'" + metaData.getOwner() + "'" + ", " + "'" + metaData.getPublic_access() + "'" + ", " + "'" + metaData.getWrite_access() + "'" + ")";
+
+        try {
+            preparedStatementatement.setString(1, metaData.getFileName());
+            preparedStatementatement.setInt(2, metaData.getSize());
+            preparedStatementatement.setString(3, metaData.getOwner());
+            preparedStatementatement.setBoolean(4, metaData.getPublic_access());
+            preparedStatementatement.setBoolean(5, metaData.getWrite_access());
+            preparedStatementatement.execute();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+        /*
+        try {
+            statement.execute(stmnt);
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }*/
+
+
 
     /**
      *  Initializes the tables in the database

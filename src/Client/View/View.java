@@ -2,6 +2,7 @@ package Client.View;
 
 import Common.Credentials;
 import Common.Filehandler;
+import Common.MetaData;
 
 import java.rmi.RemoteException;
 import java.util.Scanner;
@@ -29,7 +30,8 @@ public class View implements Runnable {
         String username = null, password;
         while (takeCommands){
             printOptions();
-            switch (scanner.nextLine()){
+            String nextLine = scanner.nextLine();
+            switch (nextLine){
                 case "TEST":
                     try {
                         System.out.println(filehandler.testMessage());
@@ -108,7 +110,48 @@ public class View implements Runnable {
                 //  SET DATA
                 case "4":
                     if(!isLoggedIn){
-                        printIllegalCommand();
+                        printIllegalCommand(nextLine);
+                    }else{
+
+                        System.out.println("What is the name of the file?");
+                        String name = scanner.nextLine();
+
+                        System.out.println("Should there be public read access? (y/n)");
+                        Boolean readAcc = scanner.nextLine().toUpperCase().equals("Y");
+
+                        System.out.println("Should there be public write access? (y/n)");
+                        Boolean writeAcc = scanner.nextLine().toUpperCase().equals("Y");
+
+                        System.out.println("Who is the new owner? (if old file, leave blank)");
+                        String owner = scanner.nextLine();
+
+                        System.out.println("What is the size of the file?");
+                        int size;
+
+                        //  Make sure that the size is an integer.
+                        while(true){
+                            if(scanner.hasNextInt()){
+                                size = scanner.nextInt();
+                                scanner.nextLine();
+                                break;
+                            }else{
+                                String next = scanner.nextLine();
+                                System.out.println(next + " is not an integer. Try again");
+                            }
+                        }
+
+                        MetaData metaData = new MetaData(name, size, owner, readAcc, writeAcc);
+
+                        try {
+                            Boolean res = filehandler.setMetadata(metaData);
+                            if(res){
+                                System.out.println("Successfully set new meta data.");
+                            }else{
+                                System.out.println("Failed to set new meta data.");
+                            }
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
                     }
                     break;
                 //  QUIT
@@ -116,7 +159,7 @@ public class View implements Runnable {
                     takeCommands = false;
                     break;
                 default:
-                    printIllegalCommand();
+                    printIllegalCommand(nextLine);
 
             }
 
@@ -135,7 +178,7 @@ public class View implements Runnable {
         }
     }
 
-    private void printIllegalCommand(){
-        System.out.println("Invalid command");
+    private void printIllegalCommand(String string){
+        System.out.println("Invalid command: " + string);
     }
 }
