@@ -39,4 +39,43 @@ public class MetaData implements Serializable {
     public Boolean getWrite_access(){
         return write_access;
     }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
+    public void setPublic_access(Boolean public_access) {
+        this.public_access = public_access;
+    }
+
+    public void setWrite_access(Boolean write_access) {
+        this.write_access = write_access;
+    }
+
+    public void printData(){
+        System.out.println("----------------");
+        System.out.println(fileName + ":");
+        System.out.println("----------------");
+        System.out.println("Owner: " + owner);
+        System.out.println("Size: " + size);
+        if(public_access){
+            System.out.println("Public access: Yes");
+        }else{
+            System.out.println("Public access: No");
+        }
+        if(write_access){
+            System.out.println("Write access: Yes");
+        }else{
+            System.out.println("Write access: No");
+        }
+        System.out.println("----------------");
+    }
 }

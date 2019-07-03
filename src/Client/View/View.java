@@ -99,7 +99,8 @@ public class View implements Runnable {
                         if(isLoggedIn){
                             String fileName = scanner.nextLine();
                             try {
-                                System.out.println(filehandler.getMetadata(fileName));
+                                MetaData metaData = filehandler.getMetadata(fileName);
+                                metaData.printData();
                             } catch (RemoteException e) {
                                 e.printStackTrace();
                             }
@@ -154,8 +155,12 @@ public class View implements Runnable {
                         }
                     }
                     break;
-                //  QUIT
+                //  EDIT DATA
                 case "5":
+
+                    break;
+                //  QUIT
+                case "6":
                     takeCommands = false;
                     break;
                 default:
@@ -172,9 +177,9 @@ public class View implements Runnable {
     private void printOptions(){
         System.out.println("Choose an action: ");
         if(isLoggedIn){
-            System.out.println("1. Register \n2. Logout \n3. Get data \n4. Set data \n5. Quit");
+            System.out.println("1. Register \n2. Logout \n3. Get data \n4. Set data \n5. Edit data \n6. Quit");
         }else{
-            System.out.println("1. Register \n2. Login \n5. Quit");
+            System.out.println("1. Register \n2. Login \n6. Quit");
         }
     }
 

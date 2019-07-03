@@ -85,7 +85,12 @@ public class Controller extends UnicastRemoteObject implements Filehandler {
 
     @Override
     public MetaData getMetadata(String filename) {
-        return null;
+        if(jdbcObject.findData(filename)){
+            return jdbcObject.getMeta(filename);
+        }else{
+            System.out.println("Could not find file: " + filename);
+            return null;
+        }
     }
 
     @Override
