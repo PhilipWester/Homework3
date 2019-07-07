@@ -15,6 +15,7 @@ public class Server {
         Server server = new Server();
         try {
             server.setupRegistry();
+            System.out.println("Server successfully initialized.");
         } catch (RemoteException | MalformedURLException e) {
             System.err.println("Failed to start server.");
             System.err.println(e);

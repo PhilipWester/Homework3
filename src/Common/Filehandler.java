@@ -15,16 +15,16 @@ public interface Filehandler extends Remote {
      * @return A test string.
      */
 
-    String testMessage() throws RemoteException;
-
     Boolean register(Credentials credentials) throws RemoteException;
 
-    Boolean login(String username, String password) throws RemoteException;
+    Integer login(String username, String password) throws RemoteException;
 
-    Boolean logout(String username) throws RemoteException;
+    Boolean logout(int cookie) throws RemoteException;
 
-    MetaData getMetadata(String filename) throws RemoteException;
+    MetaData getMetadata(String filename, String fileOwner, int cookie) throws RemoteException;
 
-    Boolean setMetadata(MetaData metaData) throws RemoteException;
+    Boolean setMetadata(MetaData metaData, int cookie) throws RemoteException;
+
+    Boolean editMetadata(MetaData metaData, String filename, String owner, int cookie) throws RemoteException;
 
 }

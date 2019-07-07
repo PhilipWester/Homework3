@@ -7,12 +7,12 @@ import java.io.Serializable;
  */
 public class MetaData implements Serializable {
     private String fileName;
-    private int size;
+    private Integer size;
     private String owner;
     private Boolean public_access;
     private Boolean write_access;
 
-    public MetaData(String fileName, int size, String owner, Boolean public_access, Boolean write_access){
+    public MetaData(String fileName, Integer size, String owner, Boolean public_access, Boolean write_access){
         this.fileName = fileName;
         this.owner = owner;
         this.size = size;
